@@ -20,8 +20,9 @@ public class Memory {
 	}
 	
 	public void memoryWrite(int address, int numberBytes, Word value) {
+		int k = 0;
 		for (int i = 0; i < numberBytes; i++) 
-			for (int j = 0, k = 0; j < 8; j++) 
+			for (int j = 0; j < 8; j++) 
 				this.memory[address + i].setBitByIndex(j, value.getValueByIndex(k++));
 	}
 	
@@ -40,7 +41,6 @@ public class Memory {
 			System.out.print("Address " + i + ": ");
 			this.memory[i].listBits();
 		}
-		
 	}
 	
 	public void resetMemory() {
