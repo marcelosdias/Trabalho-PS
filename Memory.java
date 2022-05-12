@@ -63,6 +63,16 @@ public class Memory {
 		return instruction;
 	}
 	
+	public Word readMemory(int adress, int size) {
+		Word instruction = new Word(size * 8)
+		
+		for (int i = 0, j = 0; i < size; i++) 
+			for (int k = 0; k < 8; k++)
+				instruction.setBitByIndex(j++, this.memory[address + i].getValueByIndex(k));				
+		
+		return instruction;				
+	}
+	
 	public void resetMemory() {
 		for (int i = 0; i < this.size; i++) {
 			for (int j = 0; j < 8; j++)
