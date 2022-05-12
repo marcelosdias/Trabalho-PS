@@ -20,6 +20,10 @@ public class Word {
 		this.bits = bits;
 	}
 	
+    public void setBits(int b){
+        this.bits = Integer.toBinaryString(b).toCharArray();
+    }
+	
 	public void setBitByIndex(int index, char value) {
 		this.bits[index] = value;
 	}
@@ -41,5 +45,16 @@ public class Word {
 		
 		return Integer.parseInt(convertedArray, 2);
 	}
+	
+	public String convertBinaryToHex() {
+		String convertedArray = new String(this.bits);
+		
+		return Integer.toString(Integer.parseInt(convertedArray, 2), 16);
+	}
+	
+	public int getFormat() {
+		return this.size / 8;
+	}
 }
+
 
