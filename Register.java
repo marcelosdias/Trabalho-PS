@@ -4,7 +4,6 @@ public class Register extends Word {
 	private int id;
 	private String name;
 
-
 	public Register (int registerLength, int id, String name) {
 		super(registerLength);
 		this.id = id;
