@@ -234,11 +234,11 @@ public class Machine {
 	//inicio das operações de 3/4 bytes
 	
 	public static void add (int address) {		
-		//verificar se é endereçamento direto
+		//verificar se é endereçamento indireto
 		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
-			A.setBits(A.convertBinaryToDecimal() & address );
+			A.setBits(A.convertBinaryToDecimal() + address);
 		}		
-		//caso não for direto, lê da memória
+		//caso não for indireto, lê da memória
 		else {
 			Word data = new Word(24);
 			//lê da memória
@@ -274,13 +274,13 @@ public class Machine {
 			Word data = new Word();
 			data_from_memory = memory.readMemory(address, 3);
 			if (A.convertBinaryToDecimal() == address) {
-				SW.setBits(0);
-			}
-			else if (A.convertBinaryToDecimal() > address) {
 				SW.setBits(1);
 			}
-			else {
+			else if (A.convertBinaryToDecimal() > address) {
 				SW.setBits(2);
+			}
+			else {
+				SW.setBits(3);
 			}	
 		}		
 	}	
@@ -302,6 +302,216 @@ public class Machine {
 	public static void j(int address) {
 		PC.setBits(address);
 	}
+	
+	public static void jeq(int address) {
+		if (SW.convertBinaryToDecimal() == 1) 
+			PC.setBits(address);	
+	}
+	
+	public static void jgt(int address) {
+		if (SW.convertBinaryToDecimal() == 2) 
+			PC.setBits(address);	
+	}
+	
+	public static void jlt(int address) {
+		if (SW.convertBinaryToDecimal() == 3) 
+			PC.setBits(address);	
+	}
+	
+	public static void jsub(int address) {
+		L.setBits(PC.getBits());
+		PC.setBits(address);		
+	}
+	
+	public static void lda(int address) {
+		
+		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
+			A.setBits(address);
+		}
+		
+		else {
+			Word data = new Word();
+			data_from_memory = memory.readMemory(address, 3);
+			A.setBits(data_from_memory.convertBinaryToDecimal());	
+		}		
+	}
+	
+	public static void lda(int address) {
+			
+			if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
+				B.setBits(address);
+			}
+			
+			else {
+				Word data = new Word();
+				data_from_memory = memory.readMemory(address, 3);
+				B.setBits(data_from_memory.convertBinaryToDecimal());	
+			}		
+	}
+	
+	public static void ldch(int address) {
+		
+		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
+			A.setBits(address);
+		}
+		else {
+			Word data = new Word();
+			data_from_memory = memory.readMemory(address +2, 1);
+			A.setBits(data_from_memory.convertBinaryToDecimal());
+		}		
+	}
+	
+	public static void ldl(int address) {
+		
+		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
+			L.setBits(address);
+		}
+		
+		else {
+			Word data = new Word();
+			data_from_memory = memory.readMemory(address, 3);
+			L.setBits(data_from_memory.convertBinaryToDecimal());	
+		}		
+	}
+	
+	public static void lds(int address) {
+		
+		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
+			S.setBits(address);
+		}
+		
+		else {
+			Word data = new Word();
+			data_from_memory = memory.readMemory(address, 3);
+			S.setBits(data_from_memory.convertBinaryToDecimal());	
+		}		
+	}
+	
+	public static void ldt(int address) {
+		
+		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
+			T.setBits(address);
+		}
+		
+		else {
+			Word data = new Word();
+			data_from_memory = memory.readMemory(address, 3);
+			T.setBits(data_from_memory.convertBinaryToDecimal());	
+		}		
+	}
+	
+	public static void ldx(int address) {
+		
+		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
+			X.setBits(address);
+		}
+		
+		else {
+			Word data = new Word();
+			data_from_memory = memory.readMemory(address, 3);
+			X.setBits(data_from_memory.convertBinaryToDecimal());	
+		}		
+	}
+	
+	public static void mul(int address) {
+		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
+			A.setBits(A.convertBinaryToDecimal() * address );
+		}		
+
+		else {
+			Word data = new Word(24);
+			data_from_memory = memory.readMemory(address, 3); 
+			A.setBits(A.convertBinaryToDecimal() * data_from_memory);											
+		}		
+		
+	}
+	
+	public static void or (int address) {
+		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
+			A.setBits(A.convertBinaryToDecimal() | address );
+		}		
+		else {
+			Word data = new Word(24);
+			data_from_memory = memory.readMemory(address, 3); 
+			A.setBits(A.convertBinaryToDecimal() | data_from_memory);											
+		}				
+	}
+	
+	public static void rsub() {
+		PC.setBits(L.getBits());
+	}
+	
+	public static void sta(int address, int instruc_size) {
+		memory.memoryWrite(address, instruc_size, A);
+	}
+	
+	public static void stb(int address, int instruc_size) {
+		memory.memoryWrite(address, instruc_size, B);
+	}
+	
+	public static void stch(int address, int instruc_size) {		
+		//seria o byte mais à direita (address + 2)? 
+		memory.memoryWrite(address + 2, instruc_size, A);
+	}
+	
+	public static void stl(int address, int instruc_size) {
+		memory.memoryWrite(address, instruc_size, L);
+	}
+	
+	public static void sts(int address, int instruc_size) {
+		memory.memoryWrite(address, instruc_size, S);
+	}
+	
+	public static void stt(int address, int instruc_size) {
+		memory.memoryWrite(address, instruc_size, T);
+	}
+	
+	public static void stx(int address, int instruc_size) {
+		memory.memoryWrite(address, instruc_size, X);
+	}
+	
+	public static void sub (int address) {		
+		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
+			A.setBits(A.convertBinaryToDecimal() - address);
+		}		
+		else {
+			Word data = new Word(24);
+			//lê da memória
+			data_from_memory = memory.readMemory(address, 3); 
+			A.setBits(A.convertBinaryToDecimal() - data_from_memory);											
+		}				
+	}
+	
+	public static void tix(int address) {
+		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
+			if (X.convertBinaryToDecimal() == address) {
+				SW.setBits(1);
+			}
+			else if (X.convertBinaryToDecimal() > address) {
+				SW.setBits(2);
+			}
+			else {
+				SW.setBits(3);
+			}			
+		}
+		else {
+			Word data = new Word();
+			data_from_memory = memory.readMemory(address, 3);
+			if (X.convertBinaryToDecimal() == address) {
+				SW.setBits(1);
+			}
+			else if (X.convertBinaryToDecimal() > address) {
+				SW.setBits(2);
+			}
+			else {
+				SW.setBits(3);
+			}	
+		}	
+		//deve ser incrementado antes ou depois?
+		X.setBits(X.convertBinaryToDecimal() + 1);
+	}
+	
+	//Fim das operações do tipo 3/4	
 }
 
 
