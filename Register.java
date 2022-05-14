@@ -1,5 +1,3 @@
-package projetoPS;
-
 public class Register extends Word {
 	private int id;
 	private String name;

@@ -1,4 +1,3 @@
-package projetoPS;
 import java.util.*;
 
 
@@ -48,7 +47,6 @@ public class Machine {
         runOperations(inst.getFormat());
         
 		System.out.println(A.convertBinaryToDecimal());
-
 	}
 
 	public static Word nextInstruction() {
@@ -242,8 +240,8 @@ public class Machine {
 		else {
 			Word data = new Word(24);
 			//lê da memória
-			data_from_memory = memory.readMemory(address, 3); 
-			A.setBits(A.convertBinaryToDecimal() + data_from_memory);											
+			Word data_from_memory = memory.readMemory(address, 3); 
+			A.setBits(A.convertBinaryToDecimal() + data_from_memory.convertBinaryToDecimal());											
 		}				
 	}
 	
@@ -253,8 +251,8 @@ public class Machine {
 		}		
 		else {
 			Word data = new Word(24);
-			data_from_memory = memory.readMemory(address, 3); 
-			A.setBits(A.convertBinaryToDecimal() & data_from_memory);											
+			Word data_from_memory = memory.readMemory(address, 3); 
+			A.setBits(A.convertBinaryToDecimal() & data_from_memory.convertBinaryToDecimal());											
 		}				
 	}
 	
@@ -271,8 +269,8 @@ public class Machine {
 			}			
 		}
 		else {
-			Word data = new Word();
-			data_from_memory = memory.readMemory(address, 3);
+			Word data_from_memory = memory.readMemory(address, 3);
+			
 			if (A.convertBinaryToDecimal() == address) {
 				SW.setBits(1);
 			}
@@ -293,8 +291,8 @@ public class Machine {
 		else {
 			Word data = new Word(24);
 			//lê da memória
-			data_from_memory = memory.readMemory(address, 3); 
-			A.setBits(A.convertBinaryToDecimal() / data_from_memory);											
+			Word data_from_memory = memory.readMemory(address, 3); 
+			A.setBits(A.convertBinaryToDecimal() / data_from_memory.convertBinaryToDecimal());											
 		}		
 		
 	}
@@ -330,21 +328,19 @@ public class Machine {
 		}
 		
 		else {
-			Word data = new Word();
-			data_from_memory = memory.readMemory(address, 3);
+			Word data_from_memory = memory.readMemory(address, 3);
 			A.setBits(data_from_memory.convertBinaryToDecimal());	
 		}		
 	}
 	
-	public static void lda(int address) {
+	public static void ldb(int address) {
 			
 			if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
 				B.setBits(address);
 			}
 			
 			else {
-				Word data = new Word();
-				data_from_memory = memory.readMemory(address, 3);
+				Word data_from_memory = memory.readMemory(address, 3);
 				B.setBits(data_from_memory.convertBinaryToDecimal());	
 			}		
 	}
@@ -355,8 +351,7 @@ public class Machine {
 			A.setBits(address);
 		}
 		else {
-			Word data = new Word();
-			data_from_memory = memory.readMemory(address +2, 1);
+			Word data_from_memory = memory.readMemory(address +2, 1);
 			A.setBits(data_from_memory.convertBinaryToDecimal());
 		}		
 	}
@@ -368,8 +363,7 @@ public class Machine {
 		}
 		
 		else {
-			Word data = new Word();
-			data_from_memory = memory.readMemory(address, 3);
+			Word data_from_memory = memory.readMemory(address, 3);
 			L.setBits(data_from_memory.convertBinaryToDecimal());	
 		}		
 	}
@@ -381,8 +375,7 @@ public class Machine {
 		}
 		
 		else {
-			Word data = new Word();
-			data_from_memory = memory.readMemory(address, 3);
+			Word data_from_memory = memory.readMemory(address, 3);
 			S.setBits(data_from_memory.convertBinaryToDecimal());	
 		}		
 	}
@@ -394,8 +387,7 @@ public class Machine {
 		}
 		
 		else {
-			Word data = new Word();
-			data_from_memory = memory.readMemory(address, 3);
+			Word data_from_memory = memory.readMemory(address, 3);
 			T.setBits(data_from_memory.convertBinaryToDecimal());	
 		}		
 	}
@@ -407,8 +399,7 @@ public class Machine {
 		}
 		
 		else {
-			Word data = new Word();
-			data_from_memory = memory.readMemory(address, 3);
+			Word data_from_memory = memory.readMemory(address, 3);
 			X.setBits(data_from_memory.convertBinaryToDecimal());	
 		}		
 	}
@@ -419,9 +410,8 @@ public class Machine {
 		}		
 
 		else {
-			Word data = new Word(24);
-			data_from_memory = memory.readMemory(address, 3); 
-			A.setBits(A.convertBinaryToDecimal() * data_from_memory);											
+			Word data_from_memory = memory.readMemory(address, 3); 
+			A.setBits(A.convertBinaryToDecimal() * data_from_memory.convertBinaryToDecimal());											
 		}		
 		
 	}
@@ -431,9 +421,8 @@ public class Machine {
 			A.setBits(A.convertBinaryToDecimal() | address );
 		}		
 		else {
-			Word data = new Word(24);
-			data_from_memory = memory.readMemory(address, 3); 
-			A.setBits(A.convertBinaryToDecimal() | data_from_memory);											
+			Word data_from_memory = memory.readMemory(address, 3); 
+			A.setBits(A.convertBinaryToDecimal() | data_from_memory.convertBinaryToDecimal());											
 		}				
 	}
 	
@@ -474,11 +463,10 @@ public class Machine {
 		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
 			A.setBits(A.convertBinaryToDecimal() - address);
 		}		
-		else {
-			Word data = new Word(24);
+		else { 
 			//lê da memória
-			data_from_memory = memory.readMemory(address, 3); 
-			A.setBits(A.convertBinaryToDecimal() - data_from_memory);											
+			Word data_from_memory = memory.readMemory(address, 3); 
+			A.setBits(A.convertBinaryToDecimal() - data_from_memory.convertBinaryToDecimal());											
 		}				
 	}
 	
@@ -495,8 +483,7 @@ public class Machine {
 			}			
 		}
 		else {
-			Word data = new Word();
-			data_from_memory = memory.readMemory(address, 3);
+			Word data_from_memory = memory.readMemory(address, 3);
 			if (X.convertBinaryToDecimal() == address) {
 				SW.setBits(1);
 			}

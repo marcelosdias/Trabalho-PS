@@ -1,5 +1,3 @@
-package projetoPS;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,8 +61,8 @@ public class Memory {
 		return instruction;
 	}
 	
-	public Word readMemory(int adress, int size) {
-		Word instruction = new Word(size * 8)
+	public Word readMemory(int address, int size) {
+		Word instruction = new Word(size * 8);
 		
 		for (int i = 0, j = 0; i < size; i++) 
 			for (int k = 0; k < 8; k++)

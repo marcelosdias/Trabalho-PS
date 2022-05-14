@@ -1,5 +1,3 @@
-package projetoPS;
-
 public class Word {
 	private char[] bits;
 	private int size;
