@@ -108,7 +108,7 @@ public class Memory {
             fr.close();
             return index;
         }catch(Exception e){  
-//            e.printStackTrace();
+        	e.printStackTrace();
             return -1;
         }
  
