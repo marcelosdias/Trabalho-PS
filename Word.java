@@ -39,15 +39,18 @@ public class Word {
 	} 
 	
 	public int convertBinaryToDecimal() {
-		String convertedArray = new String(this.bits);
-		
-		return Integer.parseInt(convertedArray, 2);
+		int decimal = 0;
+
+        for(int index = 0; index < bits.length; index++)
+            if (bits[index] == '1') decimal += Math.pow(2, (bits.length - index - 1));
+        
+		return decimal;
 	}
 	
 	public String convertBinaryToHex() {
-		String convertedArray = new String(this.bits);
+		int decimal = convertBinaryToDecimal();
 		
-		return Integer.toString(Integer.parseInt(convertedArray, 2), 16);
+		return Integer.toHexString(decimal).toLowerCase();
 	}
 	
 	public int getFormat() {

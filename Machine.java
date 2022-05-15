@@ -23,35 +23,65 @@ public class Machine {
 	
 	public static void main(String[] args) {
 		Word inst;
-		
-		String str1 = new String("1001000000010000"); // Instrução
 
-		String str2 = new String("000000000000000000000011"); // Conteudo do Registrador A
-		String str3 = new String("000000000000000000000011"); // Conteudo do Registrador L
-		
-        char[] auxInt = str1.toCharArray();
-        char[] auxR1 = str2.toCharArray();
-        char[] auxR2 = str3.toCharArray();
+		String filepath = "./exemplos/exemplo1.txt";
+		int instructionBytes = memory.readInstructionsFromFile(filepath);
 
-    	Word aux = new Word(16);
+        int format;
+
+		int i = 0;
+
+        do {
+            Word instruction = nextInstruction();
+            runOperations(instruction.getFormat());
+			i++;
+        } while (i != 15);  // Loop para testar Fatorial
+
+		System.out.println("X");
+        System.out.println(X.convertBinaryToDecimal());
+        System.out.println("L");
+        System.out.println(L.convertBinaryToDecimal());
+        System.out.println("B");
+        System.out.println(B.convertBinaryToDecimal());
+        System.out.println("S");
+        System.out.println(S.convertBinaryToDecimal());
+        System.out.println("T");
+        System.out.println(T.convertBinaryToDecimal());
+        System.out.println("PC");
+        System.out.println(PC.getBits());
+
+		
+		// String str1 = new String("1001000000010000"); // Instrução
+
+		// String str2 = new String("000000000000000000000011"); // Conteudo do Registrador A
+		// String str3 = new String("000000000000000000000011"); // Conteudo do Registrador L
+		
+        // char[] auxInt = str1.toCharArray();
+        // char[] auxR1 = str2.toCharArray();
+        // char[] auxR2 = str3.toCharArray();
+
+    	// Word aux = new Word(16);
     	
-    	aux.setBits(auxInt);
+    	// aux.setBits(auxInt);
     	
-    	A.setBits(auxR1);
-    	X.setBits(auxR2);
+    	// A.setBits(auxR1);
+    	// X.setBits(auxR2);
     	      
-        memory.memoryWrite(PC.convertBinaryToDecimal(), 2, aux);
+        // memory.memoryWrite(PC.convertBinaryToDecimal(), 2, aux);
 
-        inst = nextInstruction();
+        // inst = nextInstruction();
         
-        runOperations(inst.getFormat());
+        // runOperations(inst.getFormat());
         
-		System.out.println(A.convertBinaryToDecimal());
+		// System.out.println(A.convertBinaryToDecimal());
 	}
 
 	public static Word nextInstruction() {
 		Word instruction = memory.readMemory(PC.convertBinaryToDecimal());
-		
+		System.out.println(instruction.getBits());
+
+		// System.exit(0);
+
 		if (instruction.getFormat() == 2) {
 			for (int i = 0; i < 8; i++)
 				opcode.setBitByIndex(i, instruction.getValueByIndex(i));
@@ -59,14 +89,21 @@ public class Machine {
 			getRegisters(instruction);
 		}
 		else {
+			opcode.setBitByIndex(0, '0');
+			opcode.setBitByIndex(1, '0');
+
 			for (int i = 0; i < 6; i++)
-				opcode.setBitByIndex(i, instruction.getValueByIndex(i));
+				opcode.setBitByIndex(i + 2, instruction.getValueByIndex(i));
 			
 			for (int i = 6, j = 0; i < 12; i++) 
 				nixbpe.setBitByIndex(j++, instruction.getValueByIndex(i));
 		}
 		
 		PC.setBits(PC.convertBinaryToDecimal() + instruction.getFormat());
+
+		// if (instruction.getFormat() == 2) {
+		// 	getAddress(instruction);
+		// }
 
 		return instruction;
 	}
@@ -80,7 +117,7 @@ public class Machine {
 		else
 			for (int i = 12, j = 0; i < 32; i++) 
 				formattedAddress.setBitByIndex(j++, instruction.getValueByIndex(i));
-		
+
 		address.setBits(addressMode(formattedAddress.convertBinaryToDecimal()));
 	}
 	
@@ -138,6 +175,10 @@ public class Machine {
 	}
 	
 	public static void runOperations(int instructionFormat) {
+		// System.out.println(opcode.getBits());
+		System.out.println(opcode.convertBinaryToDecimal());
+		// System.out.println(opcode.convertBinaryToHex());
+
 		switch (instructionFormat) {
 			case 2:
 				switch (opcode.convertBinaryToHex()) {
@@ -170,12 +211,98 @@ public class Machine {
 					case "94":
 						subr(selectedRegister(register1), selectedRegister(register2));
 						break;
-					case "B8":
+					case "b8":
 						tixr(selectedRegister(register1));
 						break;
 				}
-			case 3: break;
-			case 4: break;
+			case 3: 
+			case 4: 
+				switch (opcode.convertBinaryToHex()) {
+					case "18":                        //case ADD
+                        add(address.convertBinaryToDecimal());
+                        break;
+                    case "40":                         //case AND
+                        and(address.convertBinaryToDecimal());
+                        break;
+                    case "28":                        //case COMP
+                        comp(address.convertBinaryToDecimal());
+                        break;
+                    case "24":                        //case DIV
+                        div(address.convertBinaryToDecimal());
+                        break;
+                    case "3c":                        //case J
+                        j(address.convertBinaryToDecimal());
+                        break;
+                    case "30":                        //case JEQ
+                        jeq(address.convertBinaryToDecimal());
+                        break;
+                    case "34":                        //case JGT
+                        jgt(address.convertBinaryToDecimal());
+                        break;
+                    case "38":                        //case JLT
+                        jlt(address.convertBinaryToDecimal());
+                        break;
+                    case "48":                        //case JSUB
+                        jsub(address.convertBinaryToDecimal());
+                        break;
+                    case "0":                        //case LDA
+                        lda(address.convertBinaryToDecimal());
+                        break;
+                    case "68":                         //case LDB
+                        ldb(address.convertBinaryToDecimal());
+                        break;
+                    case "50":                        //case LDCH
+                        ldch(address.convertBinaryToDecimal());
+                        break;
+                    case "8":                        //case LDL
+                        ldl(address.convertBinaryToDecimal());
+                        break;
+                    case "6c":                        //case LDS
+                        lds(address.convertBinaryToDecimal());
+                        break;
+                    case "74":                        //case LDT
+                        ldt(address.convertBinaryToDecimal());
+                        break;
+                    case "4":                        //case LDX
+                        ldx(address.convertBinaryToDecimal());
+                        break;
+                    case "20":                        //case MUL
+                        mul(address.convertBinaryToDecimal());
+                        break;
+                    case "44":                        //case OR
+                        or(address.convertBinaryToDecimal());
+                        break;
+                    case "4c":                        //case RSUB
+                        rsub();
+                        break;
+                    case "c": // Verificar se é 0c    //case STA
+                        sta(address.convertBinaryToDecimal(), instructionFormat);
+                        break;
+                    case "78":                        //case STB
+                        stb(address.convertBinaryToDecimal(), instructionFormat);
+                        break;
+                    case "54":                        //case STCH
+                        stch(address.convertBinaryToDecimal(), instructionFormat);
+                        break;
+                    case "14":                        //case STL
+                        stl(address.convertBinaryToDecimal(), instructionFormat);
+                        break;
+                    case "7c":                        //case STS
+                        sts(address.convertBinaryToDecimal(), instructionFormat);
+                        break;
+                    case "84":                        //case STT
+                        stt(address.convertBinaryToDecimal(), instructionFormat);
+                        break;
+                    case "10":                        //case STX
+                        stx(address.convertBinaryToDecimal(), instructionFormat);
+                        break;
+                    case "1c":                        //case SUB
+                        sub(address.convertBinaryToDecimal());
+                        break;
+                    case "2c":                        //case TIX
+                        tix(address.convertBinaryToDecimal());
+                        break;
+                }
 		}
 	}
 	
@@ -250,7 +377,6 @@ public class Machine {
 			A.setBits(A.convertBinaryToDecimal() & address );
 		}		
 		else {
-			Word data = new Word(24);
 			Word data_from_memory = memory.readMemory(address, 3); 
 			A.setBits(A.convertBinaryToDecimal() & data_from_memory.convertBinaryToDecimal());											
 		}				
@@ -269,12 +395,12 @@ public class Machine {
 			}			
 		}
 		else {
-			Word data_from_memory = memory.readMemory(address, 3);
+			int data_from_memory = memory.readMemory(address, 3).convertBinaryToDecimal();
 			
-			if (A.convertBinaryToDecimal() == address) {
+			if (A.convertBinaryToDecimal() == data_from_memory) {
 				SW.setBits(1);
 			}
-			else if (A.convertBinaryToDecimal() > address) {
+			else if (A.convertBinaryToDecimal() > data_from_memory) {
 				SW.setBits(2);
 			}
 			else {
@@ -307,6 +433,8 @@ public class Machine {
 	}
 	
 	public static void jgt(int address) {
+		System.out.println(SW.convertBinaryToDecimal());
+
 		if (SW.convertBinaryToDecimal() == 2) 
 			PC.setBits(address);	
 	}
