@@ -1,53 +1,57 @@
 import java.util.*;
 
-
 public class Machine {
 	private static Memory memory = new Memory(2048);
 	
-	protected static Register register1 = new Register(4, 10, "R1");
-	protected static Register register2 = new Register(4, 11, "R2");     
+	private static Register register1 = new Register(4, 10, "R1");
+	private static Register register2 = new Register(4, 11, "R2");     
 	
-	protected static Register A = new Register(24, 0, "A");
-	protected static Register X = new Register(24, 1, "X");
-	protected static Register L = new Register(24, 2, "L");
-	protected static Register B = new Register(24, 3, "B");
-	protected static Register S = new Register(24, 4, "S");
-	protected static Register T = new Register(24, 5, "T");
-	protected static Register F = new Register(48, 6, "F");
-	protected static Register PC = new Register(24, 8, "PC");
-	protected static Register SW = new Register(24, 9, "SW");	
+	private static Register A = new Register(24, 0, "A");
+	private static Register X = new Register(24, 1, "X");
+	private static Register L = new Register(24, 2, "L");
+	private static Register B = new Register(24, 3, "B");
+	private static Register S = new Register(24, 4, "S");
+	private static Register T = new Register(24, 5, "T");
+	private static Register F = new Register(48, 6, "F");
+	private static Register PC = new Register(24, 8, "PC");
+	private static Register SW = new Register(24, 9, "SW");	
 	
 	private static Word address = new Word(20);
 	private static Word opcode = new Word(8);
 	private static Word nixbpe = new Word(6);
-	
+	private static Word instruction15 = new Word(15);
+
 	public static void main(String[] args) {
 		Word inst;
 
 		String filepath = "./exemplos/exemplo1.txt";
+
 		int instructionBytes = memory.readInstructionsFromFile(filepath);
 
-        int format;
+    int format;
 
 		int i = 0;
 
-        do {
-            Word instruction = nextInstruction();
-            runOperations(instruction.getFormat());
+    do {
+        Word instruction = nextInstruction();
+        runOperations(instruction.getFormat());
 			i++;
-        } while (i != 15);  // Loop para testar Fatorial
+   } while (i != 15);  // Loop para testar Fatorial
 
-		System.out.println("X");
+    
+				System.out.print("A: ");
+				System.out.println(A.convertBinaryToDecimal());
+				System.out.print("X: ");
         System.out.println(X.convertBinaryToDecimal());
-        System.out.println("L");
+        System.out.print("L: ");
         System.out.println(L.convertBinaryToDecimal());
-        System.out.println("B");
+        System.out.print("B: ");
         System.out.println(B.convertBinaryToDecimal());
-        System.out.println("S");
+        System.out.print("S: ");
         System.out.println(S.convertBinaryToDecimal());
-        System.out.println("T");
+        System.out.print("T: ");
         System.out.println(T.convertBinaryToDecimal());
-        System.out.println("PC");
+        System.out.print("PC: ");
         System.out.println(PC.getBits());
 
 		
@@ -78,7 +82,6 @@ public class Machine {
 
 	public static Word nextInstruction() {
 		Word instruction = memory.readMemory(PC.convertBinaryToDecimal());
-		System.out.println(instruction.getBits());
 
 		// System.exit(0);
 
@@ -97,13 +100,11 @@ public class Machine {
 			
 			for (int i = 6, j = 0; i < 12; i++) 
 				nixbpe.setBitByIndex(j++, instruction.getValueByIndex(i));
+
+				getAddress(instruction);
 		}
 		
 		PC.setBits(PC.convertBinaryToDecimal() + instruction.getFormat());
-
-		// if (instruction.getFormat() == 2) {
-		// 	getAddress(instruction);
-		// }
 
 		return instruction;
 	}
@@ -141,7 +142,19 @@ public class Machine {
 			return memory.readMemory(selectedAddress).convertBinaryToDecimal();
 		} else if (nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') { // Imediato
 			return selectedAddress;
-		} // Olhar Instruções simples do SIC
+		} else /*if (nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '0') { // Instrução Simples
+				if (nixbpe.getValueByIndex(2) == '0') {
+					instruction15.setBitByIndex(0, nixbpe.getValueByIndex(4));
+					instruction15.setBitByIndex(1, nixbpe.getValueByIndex(5));
+					instruction15.setBitByIndex(2, nixbpe.getValueByIndex(6));
+
+					for (int i = 12, j = 3; i < 24; i++)
+						instruction15.setBitByIndex(j++, selectedAddress.getValueByIndex(i));
+
+					return instruction15.convertBinaryToDecimal();
+				} else 
+						return X.convertBinaryToDecimal() + selectedAddress;
+		}*/
 		return 0;
 	}
 	
@@ -175,9 +188,9 @@ public class Machine {
 	}
 	
 	public static void runOperations(int instructionFormat) {
-		// System.out.println(opcode.getBits());
-		System.out.println(opcode.convertBinaryToDecimal());
-		// System.out.println(opcode.convertBinaryToHex());
+		//System.out.println(opcode.getBits());
+		//System.out.println(opcode.convertBinaryToDecimal());
+		//System.out.println(opcode.convertBinaryToHex());
 
 		switch (instructionFormat) {
 			case 2:
@@ -433,7 +446,7 @@ public class Machine {
 	}
 	
 	public static void jgt(int address) {
-		System.out.println(SW.convertBinaryToDecimal());
+		//System.out.println(SW.convertBinaryToDecimal());
 
 		if (SW.convertBinaryToDecimal() == 2) 
 			PC.setBits(address);	
