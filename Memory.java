@@ -24,8 +24,7 @@ public class Memory {
 	}
 	
 	public void memoryWrite(int address, int numberBytes, Word value) {
-		int k = 0;
-		for (int i = 0; i < numberBytes; i++) 
+		for (int i = 0, k = 0; i < numberBytes; i++) 
 			for (int j = 0; j < 8; j++) 
 				this.memory[address + i].setBitByIndex(j, value.getValueByIndex(k++));
 	}
@@ -47,20 +46,21 @@ public class Memory {
 		for (int i = 0; i < 8; i++)
 			selectedOpcode.setBitByIndex(i, this.memory[address].getValueByIndex(i));
 
-		if (isFormat2(selectedOpcode.convertBinaryToHex()))
+		if (selectedOpcode.convertBinaryToHex().equals("ff")) 
+			instructionFormat = 1;
+		
+		else if (isFormat2(selectedOpcode.convertBinaryToHex()))
 			instructionFormat = 2;
-		else 
-			if (this.memory[address + 1].getValueByIndex(3) == '0')	
+		else if (this.memory[address + 1].getValueByIndex(3) == '0')	
 				instructionFormat = 3;
 			else
 				instructionFormat = 4;
 		
 		Word instruction = new Word(instructionFormat * 8);
 				
-		for (int i = 0, j = -1; i < instructionFormat; i++) 
+		for (int i = 0, j = 0; i < instructionFormat; i++) 
 			for (int k = 0; k < 8; k++) {
-				j = j + 1;
-				instruction.setBitByIndex(j, this.memory[address + i].getValueByIndex(k));
+				instruction.setBitByIndex(j++, this.memory[address + i].getValueByIndex(k));
 		}
 		return instruction;
 	}
@@ -68,10 +68,9 @@ public class Memory {
 	public Word readMemory(int address, int size) {
 		Word instruction = new Word(size * 8);
 		
-		for (int i = 0, j = -1; i < size; i++) 
+		for (int i = 0, j = 0; i < size; i++) 
 			for (int k = 0; k < 8; k++) {
-				j = j + 1;
-				instruction.setBitByIndex(j, this.memory[address + i].getValueByIndex(k));
+				instruction.setBitByIndex(j++, this.memory[address + i].getValueByIndex(k));
 		}
 		return instruction;				
 	}
@@ -112,9 +111,7 @@ public class Memory {
         	e.printStackTrace();
             return -1;
         }
- 
     }
-
 }
 
 

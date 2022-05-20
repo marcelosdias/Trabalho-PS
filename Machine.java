@@ -27,35 +27,26 @@ public class Machine {
 
 		int instructionBytes = memory.readInstructionsFromFile(filepath);
 
-		instruction = nextInstruction();
-		runOperations(instruction.getFormat());		
+		do {
+			instruction = nextInstruction();
+			runOperations(instruction.getFormat());	
 
-		instruction = nextInstruction();
-		runOperations(instruction.getFormat());	
-		System.out.println(A.convertBinaryToDecimal());	
-
-		instruction = nextInstruction();
-		runOperations(instruction.getFormat());	
-		System.out.println(A.convertBinaryToDecimal());	
-
-		instruction = nextInstruction();
-		runOperations(instruction.getFormat());	
-		
-		instruction = nextInstruction();
-		runOperations(instruction.getFormat());	
-		System.out.println(A.convertBinaryToDecimal());	
+			System.out.println(A.convertBinaryToDecimal());	
+		} while (!opcode.convertBinaryToHex().equals("ff"));
 	}
 
 	public static Word nextInstruction() {
 		Word instruction = memory.readMemory(PC.convertBinaryToDecimal());
 
-		if (instruction.getFormat() == 2) {
+		if (instruction.getFormat() == 1) {
+				for (int i = 0; i < 8; i++)
+					opcode.setBitByIndex(i, instruction.getValueByIndex(i));
+		} else if (instruction.getFormat() == 2) {
 			for (int i = 0; i < 8; i++)
 				opcode.setBitByIndex(i, instruction.getValueByIndex(i));
 			
 			getRegisters(instruction);
-		}
-		else {
+		} else {
 			opcode.setBitByIndex(0, '0');
 			opcode.setBitByIndex(1, '0');
 
