@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class Machine {
 	private static Memory memory = new Memory(2048);
 	
@@ -19,71 +17,37 @@ public class Machine {
 	private static Word address = new Word(20);
 	private static Word opcode = new Word(8);
 	private static Word nixbpe = new Word(6);
+	private static Word dataFormMemory = new Word(24);
 	private static Word instruction15 = new Word(15);
 
 	public static void main(String[] args) {
-		Word inst;
+		Word instruction;
 
 		String filepath = "./exemplos/exemplo1.txt";
 
 		int instructionBytes = memory.readInstructionsFromFile(filepath);
 
-    int format;
+		instruction = nextInstruction();
+		runOperations(instruction.getFormat());		
 
-		int i = 0;
+		instruction = nextInstruction();
+		runOperations(instruction.getFormat());	
+		System.out.println(A.convertBinaryToDecimal());	
 
-    do {
-        Word instruction = nextInstruction();
-        runOperations(instruction.getFormat());
-			i++;
-   } while (i != 15);  // Loop para testar Fatorial
+		instruction = nextInstruction();
+		runOperations(instruction.getFormat());	
+		System.out.println(A.convertBinaryToDecimal());	
 
-    
-				System.out.print("A: ");
-				System.out.println(A.convertBinaryToDecimal());
-				System.out.print("X: ");
-        System.out.println(X.convertBinaryToDecimal());
-        System.out.print("L: ");
-        System.out.println(L.convertBinaryToDecimal());
-        System.out.print("B: ");
-        System.out.println(B.convertBinaryToDecimal());
-        System.out.print("S: ");
-        System.out.println(S.convertBinaryToDecimal());
-        System.out.print("T: ");
-        System.out.println(T.convertBinaryToDecimal());
-        System.out.print("PC: ");
-        System.out.println(PC.getBits());
-
+		instruction = nextInstruction();
+		runOperations(instruction.getFormat());	
 		
-		// String str1 = new String("1001000000010000"); // Instrução
-
-		// String str2 = new String("000000000000000000000011"); // Conteudo do Registrador A
-		// String str3 = new String("000000000000000000000011"); // Conteudo do Registrador L
-		
-        // char[] auxInt = str1.toCharArray();
-        // char[] auxR1 = str2.toCharArray();
-        // char[] auxR2 = str3.toCharArray();
-
-    	// Word aux = new Word(16);
-    	
-    	// aux.setBits(auxInt);
-    	
-    	// A.setBits(auxR1);
-    	// X.setBits(auxR2);
-    	      
-        // memory.memoryWrite(PC.convertBinaryToDecimal(), 2, aux);
-
-        // inst = nextInstruction();
-        
-        // runOperations(inst.getFormat());
-        
-		// System.out.println(A.convertBinaryToDecimal());
+		instruction = nextInstruction();
+		runOperations(instruction.getFormat());	
+		System.out.println(A.convertBinaryToDecimal());	
 	}
 
 	public static Word nextInstruction() {
 		Word instruction = memory.readMemory(PC.convertBinaryToDecimal());
-
-		// System.exit(0);
 
 		if (instruction.getFormat() == 2) {
 			for (int i = 0; i < 8; i++)
@@ -188,10 +152,6 @@ public class Machine {
 	}
 	
 	public static void runOperations(int instructionFormat) {
-		//System.out.println(opcode.getBits());
-		//System.out.println(opcode.convertBinaryToDecimal());
-		//System.out.println(opcode.convertBinaryToHex());
-
 		switch (instructionFormat) {
 			case 2:
 				switch (opcode.convertBinaryToHex()) {
@@ -446,8 +406,6 @@ public class Machine {
 	}
 	
 	public static void jgt(int address) {
-		//System.out.println(SW.convertBinaryToDecimal());
-
 		if (SW.convertBinaryToDecimal() == 2) 
 			PC.setBits(address);	
 	}
@@ -463,14 +421,13 @@ public class Machine {
 	}
 	
 	public static void lda(int address) {
-		
 		if(nixbpe.getValueByIndex(0) == '0' && nixbpe.getValueByIndex(1) == '1') {			
 			A.setBits(address);
 		}
 		
 		else {
 			Word data_from_memory = memory.readMemory(address, 3);
-			A.setBits(data_from_memory.convertBinaryToDecimal());	
+			A.setBits(data_from_memory.getBits());	
 		}		
 	}
 	

@@ -18,10 +18,20 @@ public class Word {
 		this.bits = bits;
 	}
 	
-    public void setBits(int b){
-        this.bits = Integer.toBinaryString(b).toCharArray();
-    }
-	
+  public void setBits(int value) { 
+		String stringValue = Integer.toBinaryString(value);
+
+		int valueLength = stringValue.length();
+
+		if (valueLength < this.getSize()) {
+			String valueAux = String.format("%" + this.getSize() + "s", stringValue).replace(" ", "0");
+
+			this.bits = valueAux.toCharArray();
+		}
+		else 
+				this.bits = Integer.toBinaryString(value).toCharArray();
+  }
+
 	public void setBitByIndex(int index, char value) {
 		this.bits[index] = value;
 	}

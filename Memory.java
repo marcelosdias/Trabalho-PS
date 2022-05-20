@@ -32,7 +32,8 @@ public class Memory {
 
 	// Listar toda a memória
 	public void listMemory() { // Debug
-		for (int i = 0; i < this.size; i++) {
+		//for (int i = 0; i < this.size; i++) {
+		for (int i = 0; i < 30; i++) {
 			System.out.print("Address " + i + ": ");
 			this.memory[i].listBits();
 		}
