@@ -427,7 +427,7 @@ public class Machine {
 		
 		else {
 			Word data_from_memory = memory.readMemory(address, 3);
-			A.setBits(data_from_memory.getBits());	
+			A.setBits(data_from_memory.convertBinaryToDecimal());	
 		}		
 	}
 	
