@@ -17,6 +17,7 @@ public class Macro {
   private static int file_pointer = 0;
   private static int maxLevel = 0;
   private static int countExpand = 0;
+  private static String filename = new String("example1");
 
   public static void main(String[] args) throws FileNotFoundException, IOException {
     FileWriter macroWrite = new FileWriter("./tests/macro.txt");
@@ -163,7 +164,7 @@ public class Macro {
   }
 
   public static void readFile() throws FileNotFoundException { // Lê txt com o código
-    File file = new File("./tests/a.txt");
+    File file = new File("./tests/" + filename + ".txt");
     Scanner scan = new Scanner(file);
 
     while(scan.hasNextLine()) {
