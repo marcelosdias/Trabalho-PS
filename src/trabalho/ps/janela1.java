@@ -4,6 +4,10 @@
  */
 package trabalho.ps;
 
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author YuriW
@@ -217,6 +221,11 @@ public class janela1 extends javax.swing.JFrame {
         abrirarquivo.setOpaque(false);
         abrirarquivo.setContentAreaFilled(false);
         abrirarquivo.setBorderPainted(false);
+        abrirarquivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrirarquivoActionPerformed(evt);
+            }
+        });
         getContentPane().add(abrirarquivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 250, 320, 50));
 
         loadButton.setOpaque(false);
@@ -311,7 +320,6 @@ public class janela1 extends javax.swing.JFrame {
         getContentPane().add(clearbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 600, 340, 60));
 
         jTextField1.setForeground(new java.awt.Color(255, 102, 51));
-        jTextField1.setText("exemplo1.txt");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
@@ -338,6 +346,7 @@ public class janela1 extends javax.swing.JFrame {
         resetMemory();
         resetRegisters();
         jTextArea1.setText("");
+        jTextField1.setText("");
     }//GEN-LAST:event_clearbuttonActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -363,12 +372,24 @@ public class janela1 extends javax.swing.JFrame {
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
         jTextArea1.append("Lendo arquivo " + jTextField1.getText() + "...\n\n");
             
-        memory.readInstructionsFromFile("./exemplos/" + jTextField1.getText() );
+        memory.readInstructionsFromFile(jTextField1.getText());
 
         // Atualiza memória na interface
         updateMemory();
     }//GEN-LAST:event_loadButtonActionPerformed
 
+    private void abrirarquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirarquivoActionPerformed
+//        JOptionPane.showMessageDialog(null, "Escolha um arquivo", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+        JFileChooser JFile1 = new JFileChooser();
+        JFile1.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int i = JFile1.showSaveDialog(null);
+        if (JFile1.getSelectedFile() != null) {
+            String caminho1;
+            File arquivo1 = JFile1.getSelectedFile();
+            caminho1 = arquivo1.getPath();
+            jTextField1.setText(caminho1);
+        }
+    }//GEN-LAST:event_abrirarquivoActionPerformed
     /**
      * @param args the command line arguments
      */

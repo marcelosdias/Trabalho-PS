@@ -106,6 +106,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JButton" name="abrirarquivo">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="abrirarquivoActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="abrirarquivo.setOpaque(false);&#xd;&#xa;abrirarquivo.setContentAreaFilled(false);&#xd;&#xa;abrirarquivo.setBorderPainted(false);&#xd;&#xa;"/>
       </AuxValues>
@@ -279,7 +282,6 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="33" green="66" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="exemplo1.txt"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField1ActionPerformed"/>
