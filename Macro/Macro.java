@@ -7,17 +7,19 @@ import java.io.IOException;
 import java.io.FileWriter;
 
 public class Macro {
-  private static ArrayList<String> file_content = new ArrayList<>(); // Array contendo todas as linhas do codigo
-  private static ArrayList<NamTab> nam_tab_list = new ArrayList<>();
-  private static ArrayList<String> def_tab = new ArrayList<>();
-  private static ArrayList<String> args_tab = new ArrayList<>();
+  private static ArrayList<String> file_content = new ArrayList<>();
+
+  private static ArrayList<NamTab> nam_tab_list = new ArrayList<>(); // Armazena o nome da macro e limites das definições
+  private static ArrayList<String> def_tab = new ArrayList<>(); // Armazena as definições da macro
+  private static ArrayList<String> args_tab = new ArrayList<>(); // Armazena os argumentos
+  
   private static ArrayList<String> output = new ArrayList<>();
 
   private static String opcode = new String("");
   private static int file_pointer = 0;
   private static int maxLevel = 0;
   private static int countExpand = 0;
-  private static String filename = new String("example1");
+  private static String filename = new String("example3");
 
   public static void main(String[] args) throws FileNotFoundException, IOException {
     FileWriter macroWrite = new FileWriter("./tests/macro.txt");
@@ -46,15 +48,8 @@ public class Macro {
       current_line = getLine();
       processLine(current_line);
     }
-
-    file_content.clear();
-    args_tab.clear();
-
-    file_content.addAll(output);
-    output.clear();
-    file_pointer = 0;
-
-    opcode = "";
+    
+    reset();
   }
 
   public static String getLine() {
@@ -163,7 +158,7 @@ public class Macro {
     return null;
   }
 
-  public static void readFile() throws FileNotFoundException { // Lê txt com o código
+  public static void readFile() throws FileNotFoundException {
     File file = new File("./tests/" + filename + ".txt");
     Scanner scan = new Scanner(file);
 
@@ -199,7 +194,7 @@ public class Macro {
     String[] line_arg;
     String value = new String();
 
-    line_arg = current_line.split(" "); // Salvo 
+    line_arg = current_line.split(" ");
 
     for (int i = 0; i < line_arg.length; i++) {
       if (i != 1) 
@@ -210,5 +205,16 @@ public class Macro {
     value = value.trim();
 
     return value;
+  }
+
+  public static void reset() {
+    file_content.clear();
+    args_tab.clear();
+
+    file_content.addAll(output);
+    output.clear();
+    file_pointer = 0;
+
+    opcode = "";
   }
 }
