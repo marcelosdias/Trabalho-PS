@@ -1,3 +1,5 @@
+package trabalho.ps;
+
 public class Word {
 	private char[] bits;
 	private int size;
@@ -67,5 +69,3 @@ public class Word {
 		return this.size / 8;
 	}
 }
-
-
