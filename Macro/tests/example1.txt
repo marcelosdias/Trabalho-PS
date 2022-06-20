@@ -1,9 +1,0 @@
-# Exemplo dos slides
-# Definição e chamada de macro
-INCR MCDEFN ARG1, ARG2
-LOAD ARG1, ARG2
-ADD @1
-STORE ARG2
-MCEND
-INCR MARK, COUNT
-STOP

@@ -1,3 +1,5 @@
+package trabalho.ps;
+
 import java.util.Arrays;
 import java.util.List;
 import java.io.*;
@@ -113,5 +115,3 @@ public class Memory {
         }
     }
 }
-
-
