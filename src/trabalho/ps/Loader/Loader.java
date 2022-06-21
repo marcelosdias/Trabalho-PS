@@ -21,15 +21,15 @@ import java.util.ArrayList;
  * @author Marcelo
  */
 public class Loader {
-  private static Memory memory = new Memory(2048);
+//  private static Memory memory = new Memory(2048);;
   
   private static ArrayList<String> file_content = new ArrayList<>();
   private static int start = 0;
 
-  public static void main(String[] args) throws FileNotFoundException, IOException {
+  public static void load(String filename, Memory memory) throws FileNotFoundException, IOException {
     int index = 0;
     
-    readFile();
+    readFile(filename);
     
     for (String line : file_content) {
         Word value = new Word(line);
@@ -49,8 +49,8 @@ public class Loader {
     memory.listMemory();
   }
 
-  public static void readFile() throws FileNotFoundException {
-    File file = new File("C:\\Users\\Marce\\Desktop\\teste\\Carregador\\test\\deus.txt");
+  public static void readFile(String filename) throws FileNotFoundException {
+    File file = new File(filename);
     Scanner scan = new Scanner(file);
 
     while(scan.hasNextLine()) {

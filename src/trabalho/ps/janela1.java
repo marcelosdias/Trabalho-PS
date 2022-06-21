@@ -377,11 +377,7 @@ public class janela1 extends javax.swing.JFrame {
     }//GEN-LAST:event_StepbuttonActionPerformed
 
     private void runbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runbuttonActionPerformed
-         if (!jTextField1.getText().equals("")){
-            run(jTextField1.getText());
-         } else {
-            jTextArea1.append("Selecione um arquivo\n\n");
-         }
+        run(jTextField1.getText());
     }//GEN-LAST:event_runbuttonActionPerformed
 
     private void clearbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearbuttonActionPerformed
@@ -412,12 +408,23 @@ public class janela1 extends javax.swing.JFrame {
     }//GEN-LAST:event_regSWActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        jTextArea1.append("Lendo arquivo " + jTextField1.getText() + "...\n\n");
-                    
-        //memory.readInstructionsFromFile(jTextField1.getText());
+        try {
+//            if (!jTextField1.getText().equals("")){
+//                //memory.readInstructionsFromFile(jTextField1.getText());
+//            } else {
+//               jTextArea1.append("Selecione um arquivo\n\n");
+//            }
+            jTextArea1.append("Carregando instruções de " + jTextField1.getText() + "...\n\n");
 
-        // Atualiza memória na interface
-        updateMemory();
+            Loader.load(jTextField1.getText(), memory);
+            
+            // Atualiza memória na interface
+            updateMemory();
+            
+            jTextArea1.append("Instruções carregadas na memória\n\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }            
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void abrirarquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirarquivoActionPerformed
@@ -437,6 +444,7 @@ public class janela1 extends javax.swing.JFrame {
         try {
             jTextArea1.append("Executando montador para " + jTextField1.getText() + "...\n\n");
             Assembler.assemble(jTextField1.getText());
+            jTextArea1.append("Arquivo assembler.txt criado.\n\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -446,6 +454,7 @@ public class janela1 extends javax.swing.JFrame {
         try {
             jTextArea1.append("Processando macros de " + jTextField1.getText() + "...\n\n");
             Macro.process(jTextField1.getText());
+            jTextArea1.append("Arquivo macro.txt criado.\n\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
