@@ -416,7 +416,7 @@ public class janela1 extends javax.swing.JFrame {
 //            }
             jTextArea1.append("Carregando instruções de " + jTextField1.getText() + "...\n\n");
 
-            Loader.load(jTextField1.getText(), memory);
+            Loader.load("/home/arthur/Desktop/GitHub/Trabalho-PS/assembler.txt", memory);
             
             // Atualiza memória na interface
             updateMemory();
@@ -443,7 +443,7 @@ public class janela1 extends javax.swing.JFrame {
     private void montadorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_montadorButtonActionPerformed
         try {
             jTextArea1.append("Executando montador para " + jTextField1.getText() + "...\n\n");
-            Assembler.assemble(jTextField1.getText());
+            Assembler.assemble("/home/arthur/Desktop/GitHub/Trabalho-PS/macro.txt");
             jTextArea1.append("Arquivo assembler.txt criado.\n\n");
         } catch (Exception e) {
             e.printStackTrace();
@@ -453,7 +453,7 @@ public class janela1 extends javax.swing.JFrame {
     private void macroButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_macroButtonActionPerformed
         try {
             jTextArea1.append("Processando macros de " + jTextField1.getText() + "...\n\n");
-            Macro.process(jTextField1.getText());
+            Macro.proccess(jTextField1.getText());
             jTextArea1.append("Arquivo macro.txt criado.\n\n");
         } catch (Exception e) {
             e.printStackTrace();

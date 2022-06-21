@@ -37,7 +37,7 @@ public class Assembler {
 
 
   public static void assemble(String filename) throws FileNotFoundException, IOException {
-    FileWriter assemblerWrite = new FileWriter("./assembler.txt");
+    FileWriter assemblerWrite = new FileWriter("/home/arthur/Desktop/GitHub/Trabalho-PS/assembler.txt");
 
     readFile(filename);
 
@@ -59,9 +59,7 @@ public class Assembler {
 
     output.add("01001000"); // STOP
 
-    posStop();
-
-    System.out.println(symbolList);
+    defineConst();
 
     for(int i = 0; i < output.size(); i++) {
       assemblerWrite.write(output.get(i));
@@ -71,20 +69,22 @@ public class Assembler {
       }
     }
     assemblerWrite.close();
+    
+    reset();
   }
+  
+  public static void reset() {
+    file_content.clear();
+    outputSecondStep.clear();
+    output.clear();
+    symbolList.clear();
 
-  public static void posStop() {
-    for (int index = stopPosition; index < outputSecondStep.size(); index++) {
+    addressCounter = 0;
+    stopPosition = 0;
 
-      if (!outputSecondStep.get(index).equals("72 ")) {
-        if (!outputSecondStep.get(index).equals("xx")) {
-          String auxLine = toBinary(Integer.parseInt(outputSecondStep.get(index)));
-          output.add(auxLine);
-        } else {
-          output.add("00000000");
-        }
-      }
-    }
+    isLabel = false;
+
+    isExtended = false;
   }
 
   public static void processFirstStep(String line) {
@@ -158,22 +158,6 @@ public class Assembler {
     String auxOutput = "";
     String aux;
   
-
-    /*
-     * INDEX DO OPERADOR < 10 - 2 BYTES
-     * OPERADOR COMEÇA COM + - 4 BYTES
-     * 3 BYTES
-     * 
-     */
-
-    // Retira os labels
-    //currentLine = !machineInstructions.contains(formattedLine[0].replace("+", "")) ? Arrays.copyOfRange(formattedLine, 1, formattedLine.length) : formattedLine; 
-
-    // Teste se tem 4 bytes
-    //isExtended = currentLine[0].charAt(0) == '+' ? true : false;
-
-    //indexOperation = machineInstructions.indexOf(currentLine[0].replace("+", ""));
-  
     // Substituições
     for(String operation : lines) {
       int index;
@@ -217,9 +201,6 @@ public class Assembler {
   }
 
   public static void formatFile() {
-    for (int i = 0; i < outputSecondStep.size(); i++) 
-      System.out.println(outputSecondStep.get(i));
-
     String selectedOperationOpcode;
     String auxLine = "";
 
@@ -304,6 +285,19 @@ public class Assembler {
         output.add(auxLine);
       }
       stopPosition++;
+    }
+  }
+
+  public static void defineConst() {
+    for (int index = stopPosition; index < outputSecondStep.size(); index++) {
+      if (!outputSecondStep.get(index).equals("72 ")) {
+        if (!outputSecondStep.get(index).equals("xx")) {
+          String auxLine = toBinary(Integer.parseInt(outputSecondStep.get(index)));
+          output.add(auxLine);
+        } else {
+          output.add("00000000");
+        }
+      }
     }
   }
 

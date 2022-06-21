@@ -16,24 +16,40 @@ public class Macro {
   private static ArrayList<String> args_tab = new ArrayList<>(); // Armazena os argumentos
   
   private static ArrayList<String> output = new ArrayList<>();
+  private static ArrayList<String> declartion = new ArrayList<>();
 
   private static String opcode = new String("");
   private static int file_pointer = 0;
   private static int maxLevel = 0;
   private static int countExpand = 0;
 //  private static String filename = new String("example3");
+  private static int stopPosition = 0;
+
 
 //  public static void main(String[] args) throws FileNotFoundException, IOException {
-  public static void process(String filename) throws FileNotFoundException, IOException {
+  public static void proccess(String filename) throws FileNotFoundException, IOException {
 
-    FileWriter macroWrite = new FileWriter("./macro.txt");
+    FileWriter macroWrite = new FileWriter("/home/arthur/Desktop/GitHub/Trabalho-PS/macro.txt");
     
     int count = 0;
     readFile(filename);
 
+    for (stopPosition = 0; !file_content.get(stopPosition).equals("STOP"); stopPosition++);
+
+    for (int i = stopPosition; i < file_content.size(); i++) {
+        declartion.add(file_content.get(i));
+    }    
+
+    declartion.remove("STOP");
+
     do {
       runProgram();
     } while (count++ < maxLevel);
+
+    if (declartion.size() != 0) {
+      for (int i = 0; i < declartion.size(); i++)
+        file_content.add(declartion.get(i));
+    }
 
     for (int i = 0; i < file_content.size(); i++) {
       macroWrite.write(file_content.get(i));
@@ -41,8 +57,17 @@ public class Macro {
       if (i != file_content.size() - 1) 
         macroWrite.write("\n");
     }
-
+    
     macroWrite.close();
+    
+    reset();
+    file_content.clear();
+    declartion.clear();
+
+    file_pointer = 0;
+    maxLevel = 0;
+    countExpand = 0;
+    stopPosition = 0;
   }
 
   public static void runProgram() {
@@ -51,8 +76,9 @@ public class Macro {
     while (!opcode.contains("STOP")) {
       current_line = getLine();
       processLine(current_line);
+      stopPosition++;
     }
-    
+
     reset();
   }
 
