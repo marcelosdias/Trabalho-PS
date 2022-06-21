@@ -8,6 +8,15 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import trabalho.ps.Loader.Loader;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+
 /**
  *
  * @author YuriW
@@ -375,8 +384,8 @@ public class janela1 extends javax.swing.JFrame {
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
         jTextArea1.append("Lendo arquivo " + jTextField1.getText() + "...\n\n");
-            
-        memory.readInstructionsFromFile(jTextField1.getText());
+                    
+        //memory.readInstructionsFromFile(jTextField1.getText());
 
         // Atualiza memória na interface
         updateMemory();

@@ -8,7 +8,12 @@ public class Word {
 		this.bits = new char[memoryLength];
 		this.size = memoryLength;
 	}
-
+        
+        public Word(String b){
+            bits = b.toCharArray();
+            size = b.length();
+        }
+    
 	public void listBits() { // Debug
 		for (int i = 0; i < this.size; i++)
 			System.out.print(this.bits[i]);
