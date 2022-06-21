@@ -9,251 +9,260 @@ import java.io.IOException;
 import java.io.FileWriter;
 
 public class Macro {
-  private static ArrayList<String> file_content = new ArrayList<>();
 
-  private static ArrayList<NamTab> nam_tab_list = new ArrayList<>(); // Armazena o nome da macro e limites das definições
-  private static ArrayList<String> def_tab = new ArrayList<>(); // Armazena as definições da macro
-  private static ArrayList<String> args_tab = new ArrayList<>(); // Armazena os argumentos
-  
-  private static ArrayList<String> output = new ArrayList<>();
-  private static ArrayList<String> declartion = new ArrayList<>();
+    private static ArrayList<String> file_content = new ArrayList<>();
 
-  private static String opcode = new String("");
-  private static int file_pointer = 0;
-  private static int maxLevel = 0;
-  private static int countExpand = 0;
-  private static int stopPosition = 0;
+    private static ArrayList<NamTab> nam_tab_list = new ArrayList<>(); // Armazena o nome da macro e limites das definições
+    private static ArrayList<String> def_tab = new ArrayList<>(); // Armazena as definições da macro
+    private static ArrayList<String> args_tab = new ArrayList<>(); // Armazena os argumentos
 
+    private static ArrayList<String> output = new ArrayList<>();
+    private static ArrayList<String> declartion = new ArrayList<>();
 
-//  public static void main(String[] args) throws FileNotFoundException, IOException {
-  public static void proccess(String filename) throws FileNotFoundException, IOException {
+    private static String opcode = new String("");
+    private static int file_pointer = 0;
+    private static int maxLevel = 0;
+    private static int countExpand = 0;
+    private static int stopPosition = 0;
 
-    FileWriter macroWrite = new FileWriter("C:/Users/Marce/Documents/PS/macro.txt");
-    
-    int count = 0;
-    readFile(filename);
+    public static void proccess(String filename) throws FileNotFoundException, IOException {
 
-    for (stopPosition = 0; !file_content.get(stopPosition).equals("STOP"); stopPosition++);
+        FileWriter macroWrite = new FileWriter("C:/Users/Marce/Documents/PS/macro.txt");
 
-    for (int i = stopPosition; i < file_content.size(); i++) {
-        declartion.add(file_content.get(i));
-    }    
+        int count = 0;
+        readFile(filename);
 
-    declartion.remove("STOP");
+        for (stopPosition = 0; !file_content.get(stopPosition).equals("STOP"); stopPosition++);
 
-    do {
-      runProgram();
-    } while (count++ < maxLevel);
-
-    if (declartion.size() != 0) {
-      for (int i = 0; i < declartion.size(); i++)
-        file_content.add(declartion.get(i));
-    }
-
-    for (int i = 0; i < file_content.size(); i++) {
-      macroWrite.write(file_content.get(i));
-
-      if (i != file_content.size() - 1) 
-        macroWrite.write("\n");
-    }
-    
-    macroWrite.close();
-    
-    interfaceReset();
- }
-
-  public static void runProgram() {
-    String current_line;
-
-    while (!opcode.contains("STOP")) {
-      current_line = getLine();
-      processLine(current_line);
-      stopPosition++;
-    }
-
-    reset();
-  }
-
-  public static String getLine() {
-    String current_line = file_content.get(file_pointer++);
-
-    getOpcode(current_line);
-
-    return current_line;
-  }
-
-  public static void processLine(String current_line) {
-    NamTab selected_macro = findMacroName();
-
-    char[] aux_line = current_line.toCharArray();
-
-    if(aux_line[0] == '#') return;
-
-    if (selected_macro != null) {
-      expand(current_line, selected_macro);
-    } else if (current_line.contains("MCDEFN")) {
-      define(current_line);
-    } else {
-      output.add(current_line);
-    }
-  }
-
-  public static void define(String line) {
-    String current_line;
-
-    String macro_name = String.copyValueOf(opcode.toCharArray());
-    String prototype = getPrototype(line);
-
-    int start_definition = def_tab.size();
-
-    def_tab.add(prototype);
-
-    int end_definition;
-
-    int level = 1;
-
-    while(level > 0) {
-      current_line = getLine();
-
-      def_tab.add(current_line);
-
-      if (current_line.contains("MCDEFN")) {
-        level++;
-
-        if (maxLevel < level) {
-          maxLevel = level;
+        for (int i = stopPosition; i < file_content.size(); i++) {
+            declartion.add(file_content.get(i));
         }
-      }
-      else if (current_line.contains("MCEND"))
-        level--;
+
+        declartion.remove("STOP");
+
+        do {
+            runProgram();
+        } while (count++ < maxLevel);
+
+        if (declartion.size() != 0) {
+            for (int i = 0; i < declartion.size(); i++) {
+                file_content.add(declartion.get(i));
+            }
+        }
+
+        for (int i = 0; i < file_content.size(); i++) {
+            macroWrite.write(file_content.get(i));
+
+            if (i != file_content.size() - 1) {
+                macroWrite.write("\n");
+            }
+        }
+
+        macroWrite.close();
+
+        interfaceReset();
     }
 
-    end_definition = def_tab.size()-1;
+    public static void runProgram() {
+        String current_line;
 
-    nam_tab_list.add(new NamTab(macro_name, start_definition, end_definition));
-  }
+        while (!opcode.contains("STOP")) {
+            current_line = getLine();
+            processLine(current_line);
+            stopPosition++;
+        }
 
-  public static void listDefTab() {
-    for (int i = 0; i < def_tab.size(); i++)
-      System.out.println(def_tab.get(i));
-
-    System.out.println();
-  }
-
-  public static void expand(String current_line, NamTab selected_macro) {
-    int start_macro = selected_macro.getStartDefinition();
-    int end_macro = selected_macro.getEndDefinition();
-
-    String begining_def_tab = def_tab.get(start_macro);
-
-    String aux_def_tab;
-
-    String[] args = getArgs(current_line);
-    String[] prototype_args = getArgs(begining_def_tab);
-
-    for (int i = 0; i < args.length; i++) 
-      args_tab.add(args[i]);
-
-    for (int line = start_macro+1; line < end_macro; line++) {
-      aux_def_tab = def_tab.get(line);
-
-      if (aux_def_tab.contains(".SER")) 
-        aux_def_tab = aux_def_tab.replace("SER", Integer.toString(countExpand));
-      
-      for (int i = 0; i < args_tab.size(); i++) {
-        aux_def_tab = aux_def_tab.replace(prototype_args[i], args_tab.get(i));
-      }
-
-      output.add(aux_def_tab);
+        reset();
     }
 
-    args_tab.clear();
+    public static String getLine() {
+        String current_line = file_content.get(file_pointer++);
 
-    countExpand++;
-  }
+        getOpcode(current_line);
 
-  public static NamTab findMacroName() {
-    for (NamTab current_name_macro : nam_tab_list)
-      if (opcode.equals(current_name_macro.getMacroName()))
-        return current_name_macro;
-
-    return null;
-  }
-
-  public static void readFile(String filename) throws FileNotFoundException {
-    File file = new File(filename);
-    Scanner scan = new Scanner(file);
-
-    while(scan.hasNextLine()) {
-      file_content.add(scan.nextLine());
-    }
-    scan.close();
-  }
-
-  public static void getOpcode(String current_line) {
-      String line_label;
-      line_label = current_line.split(" ")[0];
-      line_label.replace(" ","");
-
-      opcode = String.copyValueOf(line_label.toCharArray());
-  }
-
-  public static String[] getArgs(String current_line) {
-    String[] line_args;
-
-    line_args = current_line.split(",");
-
-    line_args[0] = line_args[0].split(" ")[1];
-
-    for (int i = 0; i < line_args.length; i++) {
-      line_args[i] = line_args[i].replace(" ", "");
+        return current_line;
     }
 
-    return line_args;
-  }
+    public static void processLine(String current_line) {
+        NamTab selected_macro = findMacroName();
 
-  public static String getPrototype(String current_line) {
-    String[] line_arg;
-    String value = new String();
+        char[] aux_line = current_line.toCharArray();
 
-    line_arg = current_line.split(" ");
+        if (aux_line[0] == '#') {
+            return;
+        }
 
-    for (int i = 0; i < line_arg.length; i++) {
-      if (i != 1) 
-        value = value + line_arg[i] + " ";
-      
+        if (selected_macro != null) {
+            expand(current_line, selected_macro);
+        } else if (current_line.contains("MCDEFN")) {
+            define(current_line);
+        } else {
+            output.add(current_line);
+        }
     }
 
-    value = value.trim();
+    public static void define(String line) {
+        String current_line;
 
-    return value;
-  }
+        String macro_name = String.copyValueOf(opcode.toCharArray());
+        String prototype = getPrototype(line);
 
-  public static void reset() {
-    file_content.clear();
-    args_tab.clear();
+        int start_definition = def_tab.size();
 
-    file_content.addAll(output);
-    output.clear();
-    file_pointer = 0;
+        def_tab.add(prototype);
 
-    opcode = "";
-  }
-  
-  public static void interfaceReset() {
-    file_content.clear();
+        int end_definition;
 
-    nam_tab_list.clear();
-    def_tab.clear();
-    args_tab.clear();
-  
-    output.clear();
-    declartion.clear();
+        int level = 1;
 
-    opcode = "";
-    file_pointer = 0;
-    maxLevel = 0;
-    countExpand = 0;
-    stopPosition = 0;
-  }
+        while (level > 0) {
+            current_line = getLine();
+
+            def_tab.add(current_line);
+
+            if (current_line.contains("MCDEFN")) {
+                level++;
+
+                if (maxLevel < level) {
+                    maxLevel = level;
+                }
+            } else if (current_line.contains("MCEND")) {
+                level--;
+            }
+        }
+
+        end_definition = def_tab.size() - 1;
+
+        nam_tab_list.add(new NamTab(macro_name, start_definition, end_definition));
+    }
+
+    public static void listDefTab() {
+        for (int i = 0; i < def_tab.size(); i++) {
+            System.out.println(def_tab.get(i));
+        }
+
+        System.out.println();
+    }
+
+    public static void expand(String current_line, NamTab selected_macro) {
+        int start_macro = selected_macro.getStartDefinition();
+        int end_macro = selected_macro.getEndDefinition();
+
+        String begining_def_tab = def_tab.get(start_macro);
+
+        String aux_def_tab;
+
+        String[] args = getArgs(current_line);
+        String[] prototype_args = getArgs(begining_def_tab);
+
+        for (int i = 0; i < args.length; i++) {
+            args_tab.add(args[i]);
+        }
+
+        for (int line = start_macro + 1; line < end_macro; line++) {
+            aux_def_tab = def_tab.get(line);
+
+            if (aux_def_tab.contains(".SER")) {
+                aux_def_tab = aux_def_tab.replace("SER", Integer.toString(countExpand));
+            }
+
+            for (int i = 0; i < args_tab.size(); i++) {
+                aux_def_tab = aux_def_tab.replace(prototype_args[i], args_tab.get(i));
+            }
+
+            output.add(aux_def_tab);
+        }
+
+        args_tab.clear();
+
+        countExpand++;
+    }
+
+    public static NamTab findMacroName() {
+        for (NamTab current_name_macro : nam_tab_list) {
+            if (opcode.equals(current_name_macro.getMacroName())) {
+                return current_name_macro;
+            }
+        }
+
+        return null;
+    }
+
+    public static void readFile(String filename) throws FileNotFoundException {
+        File file = new File(filename);
+        Scanner scan = new Scanner(file);
+
+        while (scan.hasNextLine()) {
+            file_content.add(scan.nextLine());
+        }
+        scan.close();
+    }
+
+    public static void getOpcode(String current_line) {
+        String line_label;
+        line_label = current_line.split(" ")[0];
+        line_label.replace(" ", "");
+
+        opcode = String.copyValueOf(line_label.toCharArray());
+    }
+
+    public static String[] getArgs(String current_line) {
+        String[] line_args;
+
+        line_args = current_line.split(",");
+
+        line_args[0] = line_args[0].split(" ")[1];
+
+        for (int i = 0; i < line_args.length; i++) {
+            line_args[i] = line_args[i].replace(" ", "");
+        }
+
+        return line_args;
+    }
+
+    public static String getPrototype(String current_line) {
+        String[] line_arg;
+        String value = new String();
+
+        line_arg = current_line.split(" ");
+
+        for (int i = 0; i < line_arg.length; i++) {
+            if (i != 1) {
+                value = value + line_arg[i] + " ";
+            }
+
+        }
+
+        value = value.trim();
+
+        return value;
+    }
+
+    public static void reset() {
+        file_content.clear();
+        args_tab.clear();
+
+        file_content.addAll(output);
+        output.clear();
+        file_pointer = 0;
+
+        opcode = "";
+    }
+
+    public static void interfaceReset() {
+        file_content.clear();
+
+        nam_tab_list.clear();
+        def_tab.clear();
+        args_tab.clear();
+
+        output.clear();
+        declartion.clear();
+
+        opcode = "";
+        file_pointer = 0;
+        maxLevel = 0;
+        countExpand = 0;
+        stopPosition = 0;
+    }
 }
