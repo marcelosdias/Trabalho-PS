@@ -24,9 +24,8 @@ public class Loader {
 //  private static Memory memory = new Memory(2048);;
   
   private static ArrayList<String> file_content = new ArrayList<>();
-  private static int start = 0;
 
-  public static void load(String filename, Memory memory) throws FileNotFoundException, IOException {
+  public static void load(String filename, Memory memory, int address) throws FileNotFoundException, IOException {
     int index = 0;
     
     readFile(filename);
@@ -35,19 +34,18 @@ public class Loader {
         Word value = new Word(line);
 
         if (line.length() == 8)  // 1 Bytes 
-            memory.memoryWrite(start + index, 1, value);
+            memory.memoryWrite(address + index, 1, value);
         else if (line.length() == 16)  // 2 Bytes
-            memory.memoryWrite(start + index, 2, value);
+            memory.memoryWrite(address + index, 2, value);
         else if (line.length() == 24) // 3 Bytes
-            memory.memoryWrite(start + index, 3, value);
+            memory.memoryWrite(address + index, 3, value);
         else // 4 Bytes
-            memory.memoryWrite(start + index, 4, value);
+            memory.memoryWrite(address + index, 4, value);
       
       index = index + (line.length() / 8);
     }
-    
-    memory.listMemory();
-  }
+    reset();
+}
 
   public static void readFile(String filename) throws FileNotFoundException {
     File file = new File(filename);
@@ -57,5 +55,9 @@ public class Loader {
       file_content.add(scan.nextLine());
     }
     scan.close();
+  }
+  
+  public static void reset() {
+    file_content.clear();
   }
 }
