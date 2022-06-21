@@ -1,3 +1,5 @@
+package trabalho.ps.Montador;
+
 public class Word {
 	private char[] bits;
 	private int size;

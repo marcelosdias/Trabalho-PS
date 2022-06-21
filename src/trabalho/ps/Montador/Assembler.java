@@ -1,3 +1,5 @@
+package trabalho.ps.Montador;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -34,10 +36,10 @@ public class Assembler {
   private static int stopPosition = 0;
 
 
-  public static void main(String[] args) throws FileNotFoundException, IOException {
+  public static void assemble(String filename) throws FileNotFoundException, IOException {
     FileWriter assemblerWrite = new FileWriter("./assembler.txt");
 
-    readFile();
+    readFile(filename);
 
     initializeRegister();
 
@@ -324,8 +326,8 @@ public class Assembler {
     return lines;
   }
 
-  public static void readFile() throws FileNotFoundException {
-    File file = new File("./test/exemplo1.txt");
+  public static void readFile(String filename) throws FileNotFoundException {
+    File file = new File(filename);
     Scanner scan = new Scanner(file);
 
     while(scan.hasNextLine()) {

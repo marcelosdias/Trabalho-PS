@@ -7,6 +7,8 @@ package trabalho.ps;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import trabalho.ps.Macro.Macro;
+import trabalho.ps.Montador.Assembler;
 
 /**
  *
@@ -57,6 +59,8 @@ public class janela1 extends javax.swing.JFrame {
         runbutton = new javax.swing.JButton();
         abrirarquivo = new javax.swing.JButton();
         loadButton = new javax.swing.JButton();
+        macroButton = new javax.swing.JButton();
+        montadorButton = new javax.swing.JButton();
         Stepbutton = new javax.swing.JButton();
         regA = new javax.swing.JTextField();
         regX = new javax.swing.JTextField();
@@ -190,7 +194,6 @@ public class janela1 extends javax.swing.JFrame {
             }
         });
         jTable1.setCellSelectionEnabled(true);
-        jTable1.setRowHeight(20);
         jTable1.setSelectionBackground(new java.awt.Color(255, 255, 255));
         jScrollPane3.setViewportView(jTable1);
         jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -216,7 +219,7 @@ public class janela1 extends javax.swing.JFrame {
                 runbuttonActionPerformed(evt);
             }
         });
-        getContentPane().add(runbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 520, 340, 50));
+        getContentPane().add(runbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 530, 340, 50));
 
         abrirarquivo.setOpaque(false);
         abrirarquivo.setContentAreaFilled(false);
@@ -226,7 +229,7 @@ public class janela1 extends javax.swing.JFrame {
                 abrirarquivoActionPerformed(evt);
             }
         });
-        getContentPane().add(abrirarquivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 250, 320, 50));
+        getContentPane().add(abrirarquivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 150, 320, 50));
 
         loadButton.setOpaque(false);
         loadButton.setContentAreaFilled(false);
@@ -238,7 +241,29 @@ public class janela1 extends javax.swing.JFrame {
                 loadButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(loadButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 350, 320, 50));
+        getContentPane().add(loadButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 380, 320, 50));
+
+        macroButton.setOpaque(false);
+        macroButton.setContentAreaFilled(false);
+        macroButton.setBorderPainted(false);
+        macroButton.setBorderPainted(false);
+        macroButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                macroButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(macroButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 230, 320, 50));
+
+        montadorButton.setOpaque(false);
+        montadorButton.setContentAreaFilled(false);
+        montadorButton.setBorderPainted(false);
+        montadorButton.setBorderPainted(false);
+        montadorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                montadorButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(montadorButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 300, 320, 50));
 
         Stepbutton.setOpaque(false);
         Stepbutton.setContentAreaFilled(false);
@@ -250,7 +275,7 @@ public class janela1 extends javax.swing.JFrame {
                 StepbuttonActionPerformed(evt);
             }
         });
-        getContentPane().add(Stepbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 440, 320, 40));
+        getContentPane().add(Stepbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 460, 320, 40));
 
         regA.setEditable(false);
         regA.setText("0");
@@ -325,9 +350,9 @@ public class janela1 extends javax.swing.JFrame {
                 jTextField1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 100, 200, 50));
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 90, 200, 50));
 
-        fundo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/trabalho/imagens/PS2.png"))); // NOI18N
+        fundo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/trabalho/imagens/PS3.png"))); // NOI18N
         fundo.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 0, new java.awt.Color(255, 255, 255)));
         getContentPane().add(fundo, new org.netbeans.lib.awtextra.AbsoluteConstraints(-1, 0, 1270, 720));
 
@@ -343,7 +368,11 @@ public class janela1 extends javax.swing.JFrame {
     }//GEN-LAST:event_StepbuttonActionPerformed
 
     private void runbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runbuttonActionPerformed
-         run(jTextField1.getText());
+         if (!jTextField1.getText().equals("")){
+            run(jTextField1.getText());
+         } else {
+            jTextArea1.append("Selecione um arquivo\n\n");
+         }
     }//GEN-LAST:event_runbuttonActionPerformed
 
     private void clearbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearbuttonActionPerformed
@@ -394,6 +423,24 @@ public class janela1 extends javax.swing.JFrame {
             jTextField1.setText(caminho1);
         }
     }//GEN-LAST:event_abrirarquivoActionPerformed
+
+    private void montadorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_montadorButtonActionPerformed
+        try {
+            jTextArea1.append("Executando montador para " + jTextField1.getText() + "...\n\n");
+            Assembler.assemble(jTextField1.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_montadorButtonActionPerformed
+
+    private void macroButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_macroButtonActionPerformed
+        try {
+            jTextArea1.append("Processando macros de " + jTextField1.getText() + "...\n\n");
+            Macro.process(jTextField1.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_macroButtonActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -484,9 +531,6 @@ public class janela1 extends javax.swing.JFrame {
             updateMemory();
         }
     }
-            
-  
-
     
     // Metodos do Machine
     public void run(String filepath) {
@@ -1063,6 +1107,8 @@ public class janela1 extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JButton loadButton;
+    private javax.swing.JButton macroButton;
+    private javax.swing.JButton montadorButton;
     private javax.swing.JTextField regA;
     private javax.swing.JTextField regB;
     private javax.swing.JTextField regF;

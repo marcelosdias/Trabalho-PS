@@ -1,3 +1,5 @@
+package trabalho.ps.Macro;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -19,13 +21,15 @@ public class Macro {
   private static int file_pointer = 0;
   private static int maxLevel = 0;
   private static int countExpand = 0;
-  private static String filename = new String("example3");
+//  private static String filename = new String("example3");
 
-  public static void main(String[] args) throws FileNotFoundException, IOException {
-    FileWriter macroWrite = new FileWriter("./tests/macro.txt");
+//  public static void main(String[] args) throws FileNotFoundException, IOException {
+  public static void process(String filename) throws FileNotFoundException, IOException {
+
+    FileWriter macroWrite = new FileWriter("./macro.txt");
     
     int count = 0;
-    readFile();
+    readFile(filename);
 
     do {
       runProgram();
@@ -158,8 +162,8 @@ public class Macro {
     return null;
   }
 
-  public static void readFile() throws FileNotFoundException {
-    File file = new File("./tests/" + filename + ".txt");
+  public static void readFile(String filename) throws FileNotFoundException {
+    File file = new File(filename);
     Scanner scan = new Scanner(file);
 
     while(scan.hasNextLine()) {

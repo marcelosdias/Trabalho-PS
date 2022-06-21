@@ -1,3 +1,5 @@
+package trabalho.ps.Macro;
+
 public class NamTab {
   private String macro_name;
   private int start_macro;
