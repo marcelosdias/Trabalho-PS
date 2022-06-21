@@ -415,8 +415,8 @@ public class janela1 extends javax.swing.JFrame {
 //               jTextArea1.append("Selecione um arquivo\n\n");
 //            }
             jTextArea1.append("Carregando instruções de " + jTextField1.getText() + "...\n\n");
-
-            Loader.load("/home/arthur/Desktop/GitHub/Trabalho-PS/assembler.txt", memory);
+            
+            Loader.load("C:/Users/Marce/Documents/PS/assembler.txt", memory, PC.convertBinaryToDecimal());
             
             // Atualiza memória na interface
             updateMemory();
@@ -443,7 +443,7 @@ public class janela1 extends javax.swing.JFrame {
     private void montadorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_montadorButtonActionPerformed
         try {
             jTextArea1.append("Executando montador para " + jTextField1.getText() + "...\n\n");
-            Assembler.assemble("/home/arthur/Desktop/GitHub/Trabalho-PS/macro.txt");
+            Assembler.assemble("C:/Users/Marce/Documents/PS/macro.txt");
             jTextArea1.append("Arquivo assembler.txt criado.\n\n");
         } catch (Exception e) {
             e.printStackTrace();
@@ -539,7 +539,6 @@ public class janela1 extends javax.swing.JFrame {
     
     public void step() {
         Word instruction = nextInstruction();
-        System.out.println(opcode.convertBinaryToHex());
         if (!opcode.convertBinaryToHex().equals("48")){
             runOperations(instruction.getFormat());	
 

@@ -22,14 +22,13 @@ public class Macro {
   private static int file_pointer = 0;
   private static int maxLevel = 0;
   private static int countExpand = 0;
-//  private static String filename = new String("example3");
   private static int stopPosition = 0;
 
 
 //  public static void main(String[] args) throws FileNotFoundException, IOException {
   public static void proccess(String filename) throws FileNotFoundException, IOException {
 
-    FileWriter macroWrite = new FileWriter("/home/arthur/Desktop/GitHub/Trabalho-PS/macro.txt");
+    FileWriter macroWrite = new FileWriter("C:/Users/Marce/Documents/PS/macro.txt");
     
     int count = 0;
     readFile(filename);
@@ -60,15 +59,8 @@ public class Macro {
     
     macroWrite.close();
     
-    reset();
-    file_content.clear();
-    declartion.clear();
-
-    file_pointer = 0;
-    maxLevel = 0;
-    countExpand = 0;
-    stopPosition = 0;
-  }
+    interfaceReset();
+ }
 
   public static void runProgram() {
     String current_line;
@@ -246,5 +238,22 @@ public class Macro {
     file_pointer = 0;
 
     opcode = "";
+  }
+  
+  public static void interfaceReset() {
+    file_content.clear();
+
+    nam_tab_list.clear();
+    def_tab.clear();
+    args_tab.clear();
+  
+    output.clear();
+    declartion.clear();
+
+    opcode = "";
+    file_pointer = 0;
+    maxLevel = 0;
+    countExpand = 0;
+    stopPosition = 0;
   }
 }

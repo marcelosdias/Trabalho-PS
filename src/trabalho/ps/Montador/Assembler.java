@@ -15,10 +15,7 @@ import java.util.HashMap;
 public class Assembler {
   private static ArrayList<String> file_content = new ArrayList<>();
 
-
-  //private static String filename = new String("teste");
   private static ArrayList<String> machineInstructions = new ArrayList<>(Arrays.asList("ADDR", "CLEAR", "COMPR", "DIVR", "MULR", "RMO", "SHIFTL", "SHIFTR", "SUBR", "TIXR", "ADD", "AND", "COMP", "DIV", "J", "JEQ", "JGT", "JLT", "JSUB", "LDA", "LDB", "LDCH", "LDL", "LDS", "LDT", "LDX", "MUL", "OR", "RSUB", "STA", "STB", "STCH", "STL", "STS", "STT", "STX", "SUB", "TIX", "STOP"));
-  //private static ArrayList<String> instOpcode = new ArrayList<>(Arrays.asList("90", "4", "A0", "9C", "98", "AC", "A4", "A8", "94", "B8", "18", "40", "28", "24", "3C", "30", "34", "38", "48", "0", "68", "50", "8", "6C", "74", "4", "20", "44", "4C", "0C", "78", "54", "14", "7C", "84", "10", "1C", "2C", "0B"));
   private static ArrayList<String> instOpcode = new ArrayList<>(Arrays.asList("144", "4", "160", "156", "152", "172", "164", "168", "148", "184", "24", "64", "40", "36", "60", "48", "52", "56", "72", "0", "104", "80", "8", "108", "116", "4", "32", "68", "76", "12", "120", "84", "20", "124", "132", "16", "28", "44", "72"));
   private static ArrayList<String> outputSecondStep = new ArrayList<>();
   private static ArrayList<String> output = new ArrayList<>();
@@ -37,7 +34,7 @@ public class Assembler {
 
 
   public static void assemble(String filename) throws FileNotFoundException, IOException {
-    FileWriter assemblerWrite = new FileWriter("/home/arthur/Desktop/GitHub/Trabalho-PS/assembler.txt");
+    FileWriter assemblerWrite = new FileWriter("C:/Users/Marce/Documents/PS/assembler.txt");
 
     readFile(filename);
 
@@ -74,6 +71,7 @@ public class Assembler {
   }
   
   public static void reset() {
+    stopPosition = 0;
     file_content.clear();
     outputSecondStep.clear();
     output.clear();
