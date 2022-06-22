@@ -54,7 +54,7 @@ public class Assembler {
 
         formatFile();
 
-        output.add("01001000"); // STOP
+        output.add("00010010"); // STOP
 
         defineConst();
 

@@ -358,7 +358,7 @@ public class janela1 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void StepbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StepbuttonActionPerformed
-        if (!(opcode.convertBinaryToHex()).equals("48")) {
+        if (!(opcode.convertBinaryToHex()).equals("12")) {
             step();
         } else {
             jTextArea1.append("Finalizando execução de " + jTextField1.getText() + "...\n\n");
@@ -479,8 +479,8 @@ public class janela1 extends javax.swing.JFrame {
         regS.setText(Integer.toString(S.convertBinaryToDecimal()));
         regT.setText(Integer.toString(T.convertBinaryToDecimal()));
         regF.setText(Integer.toString(F.convertBinaryToDecimal()));
-        regPC.setText(Integer.toString(PC.convertBinaryToDecimal()));
-        regSW.setText(Integer.toString(SW.convertBinaryToDecimal()));
+        regPC.setText(Integer.toString(SW.convertBinaryToDecimal()));
+        regSW.setText(Integer.toString(PC.convertBinaryToDecimal()));
     }
 
     public void resetMemory() {
@@ -497,7 +497,7 @@ public class janela1 extends javax.swing.JFrame {
 
     public void step() {
         Word instruction = nextInstruction();
-        if (!opcode.convertBinaryToHex().equals("48")) {
+        if (!opcode.convertBinaryToHex().equals("12")) {
             runOperations(instruction.getFormat());
 
             // Atualiza registradores na interface
@@ -513,7 +513,7 @@ public class janela1 extends javax.swing.JFrame {
 
         do {
             step();
-        } while (!opcode.convertBinaryToHex().equals("48"));
+        } while (!opcode.convertBinaryToHex().equals("12"));
 
         jTextArea1.append("Finalizando execução de " + filepath + "...\n\n");
     }

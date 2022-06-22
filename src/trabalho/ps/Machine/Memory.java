@@ -52,7 +52,7 @@ public class Memory {
             selectedOpcode.setBitByIndex(i, this.memory[address].getValueByIndex(i));
         }
 
-        if (selectedOpcode.convertBinaryToHex().equals("ff")) {
+        if (selectedOpcode.convertBinaryToHex().equals("12")) {
             instructionFormat = 1;
         } else if (isFormat2(selectedOpcode.convertBinaryToHex())) {
             instructionFormat = 2;
